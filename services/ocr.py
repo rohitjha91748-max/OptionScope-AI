@@ -1,6 +1,5 @@
-import easyocr
-
-reader = easyocr.Reader(['en'])
+def extract_text(image_path):
+    return ["OCR disabled for deployment test"]
 
 def extract_text(image_path):
 
