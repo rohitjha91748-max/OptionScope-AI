@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option Chain Analyzer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1" y="11" width="4" height="10" rx="1" fill="#378ADD"/>
+          <rect x="7" y="6" width="4" height="15" rx="1" fill="#378ADD" opacity="0.7"/>
+          <rect x="13" y="2" width="4" height="19" rx="1" fill="#378ADD" opacity="0.4"/>
+          <path d="M2 9 L8 5 L14 7 L20 1" stroke="#E24B4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>OptionScope</span>
+      </div>
+      <span class="header-sub">AI-powered option chain analyzer</span>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Upload Section -->
+    <section id="upload-section">
+      <div class="upload-zone" id="drop-zone" role="button" tabindex="0" aria-label="Upload option chain screenshot">
+        <div class="upload-icon" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <p class="upload-label">Drop your option chain screenshot here</p>
+        <p class="upload-sub">NSE · BSE · Zerodha · Sensibull · any broker — PNG, JPG, WEBP</p>
+        <label class="upload-btn" for="file-input">Choose file</label>
+        <input type="file" id="file-input" accept="image/*" aria-label="Select image file" />
+      </div>
+
+      <div id="preview-wrap" style="display:none">
+        <img id="preview" alt="Uploaded option chain screenshot" />
+        <div class="preview-meta" id="preview-meta"></div>
+      </div>
+
+      <button class="analyze-btn" id="analyze-btn" disabled onclick="runAnalysis()">
+        Analyze market direction →
+      </button>
+    </section>
+
+    <!-- Loading Section -->
+    <section id="loading-section" style="display:none" aria-live="polite">
+      <div class="loader">
+        <div class="spinner" aria-hidden="true"></div>
+        <span id="loader-text">Reading option chain data…</span>
+      </div>
+      <div class="loader-steps" id="loader-steps">
+        <div class="loader-step active" id="step-1">Reading image</div>
+        <div class="loader-step" id="step-2">Calculating PCR &amp; OI</div>
+        <div class="loader-step" id="step-3">Finding max pain</div>
+        <div class="loader-step" id="step-4">Assessing IV skew</div>
+        <div class="loader-step" id="step-5">Building outlook</div>
+      </div>
+    </section>
+
+    <!-- Error Section -->
+    <section id="error-section" style="display:none">
+      <div class="error-box" role="alert">
+        <strong>Analysis failed</strong>
+        <span id="error-msg"></span>
+      </div>
+      <button class="reset-btn" onclick="resetTool()">Try another image</button>
+    </section>
+
+    <!-- Result Section -->
+    <section id="result-section" style="display:none">
+
+      <div class="verdict-card" id="verdict-card">
+        <div class="verdict-row">
+          <span class="direction-badge" id="direction-badge"></span>
+          <div class="verdict-text">
+            <div class="verdict-title" id="verdict-title"></div>
+            <div class="verdict-conf" id="verdict-conf"></div>
+          </div>
+        </div>
+        <div class="conf-bar-wrap">
+          <div class="conf-bar" id="conf-bar"></div>
+        </div>
+      </div>
+
+      <h2 class="section-label">Key signals</h2>
+      <div class="signals-grid" id="signals-grid"></div>
+
+      <h2 class="section-label">Detailed analysis</h2>
+      <div class="analysis-box" id="analysis-text"></div>
+
+      <div class="result-actions">
+        <button class="reset-btn" onclick="resetTool()">← Analyze another screenshot</button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer">
+  <p>For educational purposes only · Not financial advice · Always do your own research</p>
+
+  <p class="creator">
+    Made by Rohit Jha
+  </p>
+</footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
